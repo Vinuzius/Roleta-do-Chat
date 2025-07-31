@@ -1,4 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
+import jacobAnime from "../images/jacob_anime.png"; // Importando a imagem
 
 function ItemPage() {
   //isso aqui é um componente React, chamei de Pagina para ficar melhor de entender
@@ -21,8 +22,16 @@ function ItemPage() {
           </h1>
         </div>
 
-        <div className="bg-slate-200 p-4 rounded-md shadow">
-          <h2 className="text-xl font-semibold">{title}</h2>
+        <div className="bg-slate-300 p-4 rounded-md shadow">
+          <h2 className="text-xl font-semibold text-center">{title}</h2>
+        </div>
+
+        <div className="flex justify-center ">
+          <img
+            className="flex justify-center w-[550px] "
+            src={jacobAnime}
+            alt="Jacob Anime"
+          />
         </div>
       </div>
     </div>
