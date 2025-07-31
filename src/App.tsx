@@ -19,13 +19,27 @@ function App() {
     },
   ]);
 
+  function onAddItemSubmit(title: string) {
+    const newItem = {
+      id: items.length + 1,
+      title,
+    };
+    setItems([...items, newItem]);
+  }
+
+  function onDeleteItem(id: number) {
+    const newItems = items.filter((item) => item.id !== id);
+    setItems(newItems);
+  }
+
   return (
     <div className="w-screen h-screen bg-slate-500 flex justify-center p-6">
-      <div className="w-[500px]">
+      <div className="w-[500px] space-y-3">
         <h1 className="text-3xl text-slate-100 font-bold text-center">
           Roleta do Chat
         </h1>
-        <Itens items={items} />
+        <AddItem onAddItemSubmit={onAddItemSubmit} />
+        <Itens items={items} onDeleteItem={onDeleteItem} />
       </div>
     </div>
   );
