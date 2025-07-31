@@ -1,6 +1,7 @@
 import { ChevronRight, DeleteIcon } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "./Button";
 
 interface Item {
   id: number;
@@ -32,18 +33,12 @@ const Itens: React.FC<ItemProps> = ({ items, onDeleteItem }) => {
             <p className="bg-slate-400 text-white w-full p-2 rounded-md">
               {item.title}
             </p>
-            <button
-              onClick={() => onSeeDetailsClick(item)}
-              className=" text-red-300 bg-slate-400 rounded-md"
-            >
+            <Button onClick={() => onSeeDetailsClick(item)}>
               <ChevronRight />
-            </button>
-            <button
-              onClick={() => onDeleteItemClick(item.id)}
-              className="text-red-500 bg-slate-400 p-2 rounded-md"
-            >
+            </Button>
+            <Button onClick={() => onDeleteItemClick(item.id)}>
               <DeleteIcon />
-            </button>
+            </Button>
           </li>
         ))}
       </ul>

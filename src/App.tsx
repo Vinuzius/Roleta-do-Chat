@@ -1,25 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Itens from "./components/Itens/Items";
 import AddItem from "./components/Itens/AddItem";
+import ItemModel from "./models/ItemModel";
 
 function App() {
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      title: "Fall Guy",
-    },
-    {
-      id: 2,
-      title: "La La Land",
-    },
-    {
-      id: 3,
-      title: "Blue Valentine",
-    },
-  ]);
+  const [items, setItems] = useState(
+    JSON.parse(localStorage.getItem("items") || "[]") as ItemModel[]
+  );
+  useEffect(() => {
+    localStorage.setItem("items", JSON.stringify(items));
+    //nome do que eu quero armazenar, e o que vai ser armazenado
+  }, [items]);
 
   function onAddItemSubmit(title: string) {
+    // adicionar um novo item
     const newItem = {
       id: items.length + 1,
       title,
@@ -28,6 +23,7 @@ function App() {
   }
 
   function onDeleteItem(id: number) {
+    // deleta um item
     const newItems = items.filter((item) => item.id !== id);
     setItems(newItems);
   }

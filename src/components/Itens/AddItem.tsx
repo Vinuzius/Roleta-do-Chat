@@ -6,14 +6,16 @@ interface AddItemProps {
 
 const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
   const [title, setTitle] = useState("");
+
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // para tratar de evento no TSX, voce chama essa biblioteca primeiro
     //coloquei como função para melhor visualização
     setTitle(event.target.value);
   };
+
   const onClickSubmit = () => {
     if (!title.trim()) {
-      return alert("Por favor, digite um título!"); // Validação simples para evitar envio de título vazio
+      // verifica se o titulo existe e nao está vazio
+      return alert("Por favor, digite um título!");
     }
     onAddItemSubmit(title);
     setTitle(""); // Limpa o campo de entrada após o envio
