@@ -15,6 +15,10 @@ function App() {
     { option: "Adicione um Item" },
   ] as WheelDataModel[]);
 
+  const [mustSpin, setMustSpin] = useState(false);
+
+  const [prizeNumber, setPrizeNumber] = useState(0);
+
   useEffect(() => {
     localStorage.setItem("items", JSON.stringify(items));
     onAddWheelData();
@@ -40,6 +44,19 @@ function App() {
     setItems(newItems);
   }
 
+  const handleSpinClick = () => {
+    if (!mustSpin) {
+      const newPrizeNumber = Math.floor(Math.random() * wheelData.length);
+      setPrizeNumber(newPrizeNumber);
+      setMustSpin(true);
+    }
+  };
+
+  function onWheelStopSpinning() {
+    alert(`Parabéns! Você ganhou: ${wheelData[prizeNumber].option}`);
+    setMustSpin(false);
+  }
+
   function onAddWheelData() {
     const newWheelData =
       items.length === 0 ? [] : items.map((item) => ({ option: item.title }));
@@ -60,8 +77,20 @@ function App() {
         </div>
 
         {/* RIGHT COLUMN */}
-        <div className="flex-1 flex justify-center">
-          <WheelDecide wheelData={wheelData} />
+        <div className="flex-1 flex flex-col items-center gap-4">
+          <WheelDecide
+            wheelData={wheelData}
+            mustSpin={mustSpin}
+            prizeNumber={prizeNumber}
+            onStopSpinning={onWheelStopSpinning}
+          />
+
+          <button
+            onClick={handleSpinClick}
+            className=" bg-slate-600 hover:bg-slate-700 text-white font-bold text-lg px-10 py-3 rounded-lg"
+          >
+            Girar
+          </button>
         </div>
       </div>
     </div>

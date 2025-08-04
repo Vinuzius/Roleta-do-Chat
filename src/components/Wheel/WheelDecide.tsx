@@ -3,9 +3,17 @@ import { WheelDataModel } from "../../models/WheelDataModel";
 
 interface DataProps {
   wheelData: WheelDataModel[];
+  mustSpin: boolean;
+  prizeNumber: number;
+  onStopSpinning: () => void;
 }
 
-const WheelDecide: React.FC<DataProps> = ({ wheelData }) => {
+const WheelDecide: React.FC<DataProps> = ({
+  wheelData,
+  mustSpin,
+  prizeNumber,
+  onStopSpinning,
+}) => {
   if (wheelData.length === 0) {
     return (
       <div className="flex justify-center w-screen">
@@ -19,11 +27,15 @@ const WheelDecide: React.FC<DataProps> = ({ wheelData }) => {
   return (
     <div className="-mt-3">
       <Wheel
-        mustStartSpinning={false}
-        prizeNumber={wheelData.length > 0 ? wheelData.length : 0} // garantir que não pode dar erro
+        mustStartSpinning={mustSpin}
+        prizeNumber={prizeNumber}
         data={wheelData}
+        onStopSpinning={onStopSpinning}
         backgroundColors={["#3e3e3e", "#df3428"]}
         textColors={["#ffffff"]}
+        fontFamily="Roboto"
+        spinDuration={0.7}
+        disableInitialAnimation={true}
       />
     </div>
   );
