@@ -139,7 +139,9 @@ function App() {
 
               <div className="mt-4 text-center">
                 <p className="text-2xl font-bold tracking-tight text-white sm:text-5xl">
-                  {`${wheelData[prizeNumber].option}`}
+                  {wheelData && wheelData.length > 0
+                    ? `${wheelData[prizeNumber].option}`
+                    : `Vazio`}
                 </p>
               </div>
 

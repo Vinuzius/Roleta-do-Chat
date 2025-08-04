@@ -6,7 +6,7 @@ interface AddItemProps {
 }
 
 const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(" ");
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
