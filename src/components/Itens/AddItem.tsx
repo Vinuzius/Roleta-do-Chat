@@ -1,11 +1,13 @@
 import { useState } from "react";
+import { DialogPanel, DialogTitle, Dialog } from "@headlessui/react";
 
 interface AddItemProps {
   onAddItemSubmit: (title: string) => void;
 }
 
 const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(" ");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //coloquei como função para melhor visualização
@@ -14,9 +16,11 @@ const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
 
   const onClickSubmit = () => {
     if (!title.trim()) {
-      // verifica se o titulo existe e nao está vazio
-      return alert("Por favor, digite um título!");
+      // Verifica se está vazio
+      setIsAlertOpen(true);
+      return;
     }
+
     onAddItemSubmit(title);
     setTitle(""); // Limpa o campo de entrada após o envio
   };
@@ -36,6 +40,33 @@ const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
       >
         Adicionar Item
       </button>
+
+      <Dialog
+        open={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        className="relative z-50"
+      >
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+
+        <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
+          <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
+            <DialogTitle className="font-semibold text-lg text-slate-800">
+              Erro
+            </DialogTitle>
+            <p className="mt-2 text-sm text-slate-600">
+              Por favor, digite um título para continuar.
+            </p>
+            <div className="mt-4 text-right">
+              <button
+                onClick={() => setIsAlertOpen(false)}
+                className="rounded-md bg-slate-700 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-600"
+              >
+                OK
+              </button>
+            </div>
+          </DialogPanel>
+        </div>
+      </Dialog>
     </div>
   );
 };
