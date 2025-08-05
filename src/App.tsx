@@ -63,13 +63,14 @@ function App() {
     setItems(newItems);
   } // deleta um item
 
-  function onModifyItem(id: number) {
+  function onModifyItem(id: number, newTitle: string) {
     setItems(
-      items.map((items) => {
-        if (items.id === id) {
-          return { ...items, title: "modificado" };
+      items.map((item) => {
+        if (item.id === id) {
+          return { ...item, title: newTitle };
         }
-        return items;
+
+        return item;
       })
     );
   }
@@ -149,6 +150,7 @@ function App() {
         </div>
       </div>
 
+      {/* WHEEL MODAL */}
       <Dialog
         open={modalOpen}
         onClose={onCloseModal}
