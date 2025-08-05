@@ -1,7 +1,6 @@
-import { ChevronRight, DeleteIcon } from "lucide-react";
+import { DeleteIcon, RotateCcw } from "lucide-react";
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import Button from "./Button";
+import Button from "../Button";
 
 interface Item {
   id: number;
@@ -10,19 +9,16 @@ interface Item {
 interface ItemProps {
   items: Item[];
   onDeleteItem: (id: number) => void;
+  onModifyItem: (id: number) => void;
 }
 
-const Itens: React.FC<ItemProps> = ({ items, onDeleteItem }) => {
-  const navigate = useNavigate(); //uso do hook useNavigate para navegar entre as páginas
-  function onSeeDetailsClick(item: Item) {
-    //uso do queryParams para passar o título do item  ele vai tratar qualquer coisa sem ter risco de haver um erro
-    const queryParams = new URLSearchParams();
-    queryParams.set("title", item.title);
-    navigate(`/item?${queryParams.toString()}`);
-  }
-
+const Itens: React.FC<ItemProps> = ({ items, onDeleteItem, onModifyItem }) => {
   function onDeleteItemClick(id: number) {
     onDeleteItem(id);
+  }
+
+  function onModifyItemClick(id: number) {
+    onModifyItem(id);
   }
 
   return (
@@ -33,8 +29,8 @@ const Itens: React.FC<ItemProps> = ({ items, onDeleteItem }) => {
             <p className="bg-slate-400 text-white w-full p-2 rounded-md">
               {item.title}
             </p>
-            <Button onClick={() => onSeeDetailsClick(item)}>
-              <ChevronRight />
+            <Button onClick={() => onModifyItemClick(item.id)}>
+              <RotateCcw />
             </Button>
             <Button onClick={() => onDeleteItemClick(item.id)}>
               <DeleteIcon />

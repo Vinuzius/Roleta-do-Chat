@@ -6,6 +6,8 @@ import ItemModel from "./models/ItemModel";
 import WheelDecide from "./components/Wheel/WheelDecide";
 import { WheelDataModel } from "./models/WheelDataModel";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function App() {
   const [items, setItems] = useState(
@@ -21,6 +23,8 @@ function App() {
   const [prizeNumber, setPrizeNumber] = useState(0);
 
   const [modalOpen, setModalOpen] = useState(false);
+
+  const navigate = useNavigate(); //uso do hook useNavigate para navegar entre as páginas
 
   useEffect(() => {
     localStorage.setItem("items", JSON.stringify(items));
@@ -59,6 +63,17 @@ function App() {
     setItems(newItems);
   } // deleta um item
 
+  function onModifyItem(id: number) {
+    setItems(
+      items.map((items) => {
+        if (items.id === id) {
+          return { ...items, title: "modificado" };
+        }
+        return items;
+      })
+    );
+  }
+
   const handleSpinClick = () => {
     if (!mustSpin) {
       const newPrizeNumber = Math.floor(Math.random() * wheelData.length);
@@ -82,17 +97,38 @@ function App() {
     setModalOpen(false);
   }
 
+  function onSecretClick() {
+    //uso do queryParams para passar o título do item  ele vai tratar qualquer coisa sem ter risco de haver um erro
+    const queryParams = new URLSearchParams();
+    navigate(`/secret?${queryParams.toString()}`);
+  }
+
   return (
     <div className="w-full min-h-screen bg-slate-500 flex flex-col p-6 gap-6">
-      <h1 className="text-3xl bg-slate-600 text-slate-100 font-bold text-center">
-        Roleta do Chat
-      </h1>
+      <div className="relative flex items-center">
+        {/* Header */}
+        <h1 className="w-full rounded-md bg-slate-600 py-2 text-center text-3xl font-bold text-slate-100">
+          Roleta do Chat
+        </h1>
+        <div className="absolute right-2">
+          <button
+            className="p-2 rounded-md text-slate-500 hover:bg-slate-700"
+            onClick={() => onSecretClick()}
+          >
+            <ChevronRight />
+          </button>
+        </div>
+      </div>
 
       <div className="flex flex-1 gap-6 items-start">
         {/* LEFT COLUMN */}
         <div className="w-[500px] space-y-3">
           <AddItem onAddItemSubmit={onAddItemSubmit} />
-          <Itens items={items} onDeleteItem={onDeleteItem} />
+          <Itens
+            items={items}
+            onDeleteItem={onDeleteItem}
+            onModifyItem={onModifyItem}
+          />
         </div>
 
         {/* RIGHT COLUMN */}

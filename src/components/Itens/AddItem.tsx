@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { DialogPanel, DialogTitle, Dialog } from "@headlessui/react";
+import Button from "../Button";
 
 interface AddItemProps {
   onAddItemSubmit: (title: string) => void;
@@ -12,6 +13,15 @@ const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //coloquei como função para melhor visualização
     setTitle(event.target.value);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      // Verifica se a tecla pressionada foi a "Enter"
+      // Impede o comportamento padrão da tecla Enter (como recarregar a página se estiver num formulário)
+      event.preventDefault();
+      onClickSubmit();
+    }
   };
 
   const onClickSubmit = () => {
@@ -31,15 +41,16 @@ const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
         className="border border-slate-300 outline-slate-400 px-4 py-2 rounded-md"
         type="text"
         placeholder="Digite o título a ser adicionado"
+        onKeyDown={handleKeyDown}
         value={title}
         onChange={handleTitleChange}
       />
-      <button
+      <Button
         onClick={onClickSubmit}
-        className="bg-slate-400 text-white px-4 p-2 rounded-md font-medium"
+        className="px-4 font-medium hover:bg-slate-400"
       >
         Adicionar Item
-      </button>
+      </Button>
 
       <Dialog
         open={isAlertOpen}
