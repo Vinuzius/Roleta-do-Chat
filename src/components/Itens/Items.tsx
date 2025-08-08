@@ -1,6 +1,6 @@
 import { Check, DeleteIcon, RotateCcw, X } from "lucide-react";
 import React, { useState } from "react";
-import Button from "../Button";
+import Button from "../utils/Button";
 import { ItemEditForm } from "./ItemEditForm";
 
 interface Item {
@@ -18,18 +18,19 @@ const Itens: React.FC<ItemProps> = ({ items, onDeleteItem, onModifyItem }) => {
 
   function onDeleteItemClick(id: number) {
     onDeleteItem(id);
-  }
+  } // ao deletar item
 
   const handleSaveItem = (newTitle: string) => {
     if (editingItemId !== null) {
+      // caso esteja modificando
       onModifyItem(editingItemId, newTitle);
       setEditingItemId(null);
     }
-  };
+  }; // ao salvar o item modificado
 
   const handleModifyClick = (item: Item) => {
     setEditingItemId(item.id);
-  };
+  }; // ao clicar no botão de edição
 
   return (
     <div className="space-y-3">

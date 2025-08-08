@@ -34,7 +34,7 @@ const WheelDecide: React.FC<DataProps> = ({
         backgroundColors={["#3e3e3e", "#df3428"]}
         textColors={["#ffffff"]}
         fontFamily="Roboto"
-        spinDuration={0.7}
+        spinDuration={0.5}
         disableInitialAnimation={true}
       />
     </div>

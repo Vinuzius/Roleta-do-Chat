@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { DialogPanel, DialogTitle, Dialog } from "@headlessui/react";
-import Button from "../Button";
+import Button from "../utils/Button";
 
 interface AddItemProps {
   onAddItemSubmit: (title: string) => void;
 }
 
 const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
-  const [title, setTitle] = useState(" ");
+  const [title, setTitle] = useState(""); // pude criar um State aqui porque ele nao afeta nada alem do interior do componente
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,9 +38,11 @@ const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
   return (
     <div className="space-y-3 p-4 flex flex-col bg-slate-200 rounded-md shadow">
       <input
+        name="adicionar"
         className="border border-slate-300 outline-slate-400 px-4 py-2 rounded-md"
         type="text"
         placeholder="Digite o título a ser adicionado"
+        maxLength={18}
         onKeyDown={handleKeyDown}
         value={title}
         onChange={handleTitleChange}

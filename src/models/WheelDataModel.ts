@@ -6,12 +6,12 @@ interface WheelDataModel {
 }
 
 interface StyleType {
-  backgroundColor?: string; // Optional
-  textColor?: string; // Optional
-  fontFamily?: string; // Optional
-  fontSize?: number; // Optional
-  fontWeight?: number | string; // Optional
-  fontStyle?: string; // Optional
+  backgroundColor?: string; // array
+  textColor?: string; //
+  fontFamily?: string; //
+  fontSize?: number; //
+  fontWeight?: number | string; //
+  fontStyle?: string; //
 }
 
 interface ImageProps {

@@ -16,8 +16,8 @@ function SecretPage() {
           >
             <ChevronLeftIcon />
           </button>
-          <h1 className="text-3xl text-slate-100 font-bold text-center p-6">
-            Segredo HAHAHA
+          <h1 className="text-5xl text-slate-100 font-bold text-center p-6">
+            Segredo HAHAHA CHUVA DE JACOB
           </h1>
         </div>
 

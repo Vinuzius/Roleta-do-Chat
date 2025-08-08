@@ -1,6 +1,6 @@
 import { useState, KeyboardEvent } from "react";
 import { Check, X } from "lucide-react";
-import Button from "../Button";
+import Button from "../utils/Button";
 
 interface ItemEditFormProps {
   initialTitle: string;
@@ -31,6 +31,7 @@ export const ItemEditForm: React.FC<ItemEditFormProps> = ({
     <>
       <input
         type="text"
+        maxLength={18}
         value={editedTitle}
         onChange={(e) => setEditedTitle(e.target.value)}
         className="w-full p-2 rounded-md border border-slate-400 outline-blue-500"
