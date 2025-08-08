@@ -1,17 +1,27 @@
 import { useState } from "react";
 import { DialogPanel, DialogTitle, Dialog } from "@headlessui/react";
+import Button from "../utils/Button";
 
 interface AddItemProps {
   onAddItemSubmit: (title: string) => void;
 }
 
 const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
-  const [title, setTitle] = useState(" ");
+  const [title, setTitle] = useState(""); // pude criar um State aqui porque ele nao afeta nada alem do interior do componente
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     //coloquei como função para melhor visualização
     setTitle(event.target.value);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      // Verifica se a tecla pressionada foi a "Enter"
+      // Impede o comportamento padrão da tecla Enter (como recarregar a página se estiver num formulário)
+      event.preventDefault();
+      onClickSubmit();
+    }
   };
 
   const onClickSubmit = () => {
@@ -28,18 +38,21 @@ const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
   return (
     <div className="space-y-3 p-4 flex flex-col bg-slate-200 rounded-md shadow">
       <input
+        name="adicionar"
         className="border border-slate-300 outline-slate-400 px-4 py-2 rounded-md"
         type="text"
         placeholder="Digite o título a ser adicionado"
+        maxLength={18}
+        onKeyDown={handleKeyDown}
         value={title}
         onChange={handleTitleChange}
       />
-      <button
+      <Button
         onClick={onClickSubmit}
-        className="bg-slate-400 text-white px-4 p-2 rounded-md font-medium"
+        className="px-4 font-medium hover:bg-slate-400"
       >
         Adicionar Item
-      </button>
+      </Button>
 
       <Dialog
         open={isAlertOpen}

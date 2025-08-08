@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ItemPage from "./pages/ItemPage.tsx";
+import SecretPage from "./pages/EasterEggPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -12,8 +12,8 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/item",
-    element: <ItemPage />,
+    path: "/secret",
+    element: <SecretPage />,
   },
 ]);
 

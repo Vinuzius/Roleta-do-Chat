@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import Itens from "./components/Itens/Items";
 import AddItem from "./components/Itens/AddItem";
@@ -6,45 +6,18 @@ import ItemModel from "./models/ItemModel";
 import WheelDecide from "./components/Wheel/WheelDecide";
 import { WheelDataModel } from "./models/WheelDataModel";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import Button from "./components/utils/Button";
+import SettingsPanel from "./components/Wheel/SettingsPanel";
+import ThemeModel from "./models/themeModel";
+import FontModel from "./models/FontModel";
 
 function App() {
+  /* Items */
   const [items, setItems] = useState(
     JSON.parse(localStorage.getItem("items") || "[]") as ItemModel[]
   );
-
-  const [wheelData, setWheelData] = useState([
-    { option: "Adicione um Item" },
-  ] as WheelDataModel[]);
-
-  const [mustSpin, setMustSpin] = useState(false);
-
-  const [prizeNumber, setPrizeNumber] = useState(0);
-
-  const [modalOpen, setModalOpen] = useState(false);
-
-  useEffect(() => {
-    localStorage.setItem("items", JSON.stringify(items));
-    onAddWheelData();
-    //nome do que eu quero armazenar, e o que vai ser armazenado
-  }, [items]); // sempre que a lista de item for alterada, atualiza o localStorage
-
-  useEffect(() => {
-    onAddWheelData();
-  }, []); //Quando inicializar o app, já adiciona os dados da memoria na roleta
-
-  useEffect(() => {
-    if (modalOpen) {
-      // caso o Modal esteja aberto, vai iniciar um temporizador para fechá-lo
-      const timerId = setTimeout(() => {
-        onCloseModal();
-      }, 10000); // 10000 milissegundos = 10 segundos
-
-      return () => {
-        //Esta função é executada se o modal for fechado manualmente antes do tempo acabar
-        clearTimeout(timerId);
-      };
-    }
-  }, [modalOpen, onCloseModal]); // Fecha o modal automaticamente após X segundos
 
   function onAddItemSubmit(title: string) {
     const newItem = {
@@ -57,7 +30,30 @@ function App() {
   function onDeleteItem(id: number) {
     const newItems = items.filter((item) => item.id !== id);
     setItems(newItems);
-  } // deleta um item
+  } // deleta o item
+
+  function onModifyItem(id: number, newTitle: string) {
+    setItems(
+      items.map((item) => {
+        if (item.id === id) {
+          return { ...item, title: newTitle };
+        }
+
+        return item;
+      })
+    );
+  } // modifica o item
+
+  /* Wheel */
+  const [wheelData, setWheelData] = useState([
+    { option: "Adicione um Item" },
+  ] as WheelDataModel[]);
+
+  const [mustSpin, setMustSpin] = useState(false);
+
+  const [prizeNumber, setPrizeNumber] = useState(0);
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleSpinClick = () => {
     if (!mustSpin) {
@@ -80,19 +76,143 @@ function App() {
 
   function onCloseModal() {
     setModalOpen(false);
+  } // fechar modal
+
+  /* Options */
+  const themesColor: ThemeModel[] = [
+    { id: 1, name: "Flamengo", colors: ["#3e3e3e", "#df3428"] },
+    { id: 2, name: "Botafogo", colors: ["#ffffff", "#000000"] },
+    { id: 3, name: "Palmeiras", colors: ["#00ff1f", "#ffffff"] },
+  ];
+
+  const fontOptions: FontModel[] = [
+    { id: 1, value: "Roboto", name: "Roboto" },
+    { id: 2, value: "Comic Relief", name: "Comic Relief" },
+    { id: 3, value: "Rubik Wet Paint", name: "Rubik Wet Paint" },
+  ];
+
+  const [optionOpen, setOptionOpen] = useState(false);
+  //const [background, setBackground] = useState(false);
+  const [selectedFont, setSelectedFont] = useState("Roboto");
+  const [spinDuration, setSpinDuration] = useState(0.5);
+  const [fontSize, setFontSize] = useState(20);
+  const [isTextWhite, setIsTextWhite] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState(themesColor[0]);
+
+  function onChangeFont(event: React.ChangeEvent<HTMLSelectElement>) {
+    setSelectedFont(event.target.value);
   }
+
+  const handleSpinDurationChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = parseFloat(event.target.value);
+
+      // Evita que o estado se torne NaN (Not a Number) se o campo estiver vazio
+      if (!isNaN(newValue)) {
+        setSpinDuration(newValue);
+      }
+    },
+    []
+  );
+
+  const handleFontSizeChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = parseFloat(event.target.value);
+      if (!isNaN(newValue)) {
+        setFontSize(newValue);
+      }
+    },
+    []
+  );
+
+  const handleTextColor = useCallback(() => {
+    setIsTextWhite((valorAtual) => !valorAtual);
+  }, []); //garante que a função não seja re-criada em memória a cada nova renderização do componente
+
+  /* Use Effects */
+  useEffect(() => {
+    localStorage.setItem("items", JSON.stringify(items));
+    onAddWheelData();
+    //nome do que eu quero armazenar, e o que vai ser armazenado
+  }, [items]); // sempre que a lista de item for alterada, atualiza o localStorage
+
+  useEffect(() => {
+    onAddWheelData();
+  }, []); //Quando inicializar o app, já adiciona os dados da memoria na roleta
+
+  useEffect(() => {
+    if (modalOpen) {
+      // caso o Modal esteja aberto, vai iniciar um temporizador para fechá-lo
+      const timerId = setTimeout(() => {
+        onCloseModal();
+      }, 5000); // 1000 milissegundos = 1 segundos
+
+      return () => {
+        //Esta função é executada se o modal for fechado manualmente antes do tempo acabar
+        clearTimeout(timerId);
+      };
+    }
+  }, [modalOpen, onCloseModal]); // Fecha o modal automaticamente após X segundos
+
+  /* Página Secreta */
+  const navigate = useNavigate(); //uso do hook useNavigate para navegar entre as páginas
+
+  function onSecretClick() {
+    //uso do queryParams para passar o título do item  ele vai tratar qualquer coisa sem ter risco de haver um erro
+    const queryParams = new URLSearchParams();
+    navigate(`/secret?${queryParams.toString()}`);
+  } // paginar para página secret
 
   return (
     <div className="w-full min-h-screen bg-slate-500 flex flex-col p-6 gap-6">
-      <h1 className="text-3xl bg-slate-600 text-slate-100 font-bold text-center">
-        Roleta do Chat
-      </h1>
+      <div className="relative flex items-center">
+        {/* Header */}
+        <h1 className="w-full rounded-md bg-slate-600 py-2 text-center text-3xl font-bold text-slate-100">
+          Roleta do Chat
+        </h1>
+        <div className="absolute right-2">
+          <button
+            className="p-2 rounded-md text-slate-500 hover:bg-slate-700"
+            onClick={() => onSecretClick()}
+          >
+            <ChevronRight />
+          </button>
+        </div>
+      </div>
 
       <div className="flex flex-1 gap-6 items-start">
         {/* LEFT COLUMN */}
         <div className="w-[500px] space-y-3">
           <AddItem onAddItemSubmit={onAddItemSubmit} />
-          <Itens items={items} onDeleteItem={onDeleteItem} />
+          <Itens
+            items={items}
+            onDeleteItem={onDeleteItem}
+            onModifyItem={onModifyItem}
+          />
+          <div className="flex-col space-y-2">
+            <Button
+              onClick={() => setOptionOpen(!optionOpen)}
+              className="text-sm bg-slate-600"
+            >
+              Modificar Roleta
+            </Button>
+            {optionOpen && (
+              <SettingsPanel
+                themes={themesColor}
+                fonts={fontOptions}
+                selectedTheme={selectedTheme}
+                onThemeChange={setSelectedTheme}
+                selectedFont={selectedFont}
+                onFontChange={onChangeFont}
+                fontSize={fontSize}
+                onFontSizeChange={handleFontSizeChange}
+                spinDuration={spinDuration}
+                onSpinDurationChange={handleSpinDurationChange}
+                isTextWhite={isTextWhite}
+                onTextColorChange={handleTextColor}
+              />
+            )}
+          </div>
         </div>
 
         {/* RIGHT COLUMN */}
@@ -104,15 +224,16 @@ function App() {
             onStopSpinning={onWheelStopSpinning}
           />
 
-          <button
+          <Button
             onClick={handleSpinClick}
             className=" bg-slate-600 hover:bg-slate-700 text-white font-bold text-lg px-10 py-3 rounded-lg"
           >
             Girar
-          </button>
+          </Button>
         </div>
       </div>
 
+      {/* WHEEL MODAL */}
       <Dialog
         open={modalOpen}
         onClose={onCloseModal}
