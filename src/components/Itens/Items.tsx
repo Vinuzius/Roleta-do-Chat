@@ -1,4 +1,4 @@
-import { Check, DeleteIcon, RotateCcw, X } from "lucide-react";
+import { DeleteIcon, RotateCcw } from "lucide-react";
 import React, { useState } from "react";
 import Button from "../utils/Button";
 import { ItemEditForm } from "./ItemEditForm";
