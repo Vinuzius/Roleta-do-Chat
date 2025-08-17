@@ -1,11 +1,17 @@
 import { Wheel } from "react-custom-roulette";
 import { WheelDataModel } from "../../models/WheelDataModel";
+import ThemeModel from "../../models/themeModel";
 
 interface DataProps {
   wheelData: WheelDataModel[];
   mustSpin: boolean;
   prizeNumber: number;
   onStopSpinning: () => void;
+  fontFamily: string;
+  fontSize: number;
+  spinDuration: number;
+  isTextWhite: boolean;
+  theme: ThemeModel;
 }
 
 const WheelDecide: React.FC<DataProps> = ({
@@ -13,6 +19,11 @@ const WheelDecide: React.FC<DataProps> = ({
   mustSpin,
   prizeNumber,
   onStopSpinning,
+  fontFamily,
+  fontSize,
+  spinDuration,
+  isTextWhite,
+  theme,
 }) => {
   if (wheelData.length === 0) {
     return (
@@ -31,10 +42,11 @@ const WheelDecide: React.FC<DataProps> = ({
         prizeNumber={prizeNumber}
         data={wheelData}
         onStopSpinning={onStopSpinning}
-        backgroundColors={["#3e3e3e", "#df3428"]}
-        textColors={["#ffffff"]}
-        fontFamily="Roboto"
-        spinDuration={0.5}
+        backgroundColors={theme.colors}
+        textColors={isTextWhite ? ["#ffffff"] : ["#000000"]}
+        fontFamily={fontFamily}
+        fontSize={fontSize}
+        spinDuration={spinDuration}
         disableInitialAnimation={true}
       />
     </div>

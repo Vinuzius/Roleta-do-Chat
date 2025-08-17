@@ -12,6 +12,7 @@ import Button from "./components/utils/Button";
 import SettingsPanel from "./components/Wheel/SettingsPanel";
 import ThemeModel from "./models/themeModel";
 import FontModel from "./models/FontModel";
+import MovieScrap from "./components/MovieScrap";
 
 function App() {
   /* Items */
@@ -21,18 +22,18 @@ function App() {
 
   function onAddItemSubmit(title: string) {
     const newItem = {
-      id: items.length + 1,
+      id: crypto.randomUUID(),
       title,
     };
     setItems([...items, newItem]);
   } // adicionar um novo item
 
-  function onDeleteItem(id: number) {
+  function onDeleteItem(id: string) {
     const newItems = items.filter((item) => item.id !== id);
     setItems(newItems);
   } // deleta o item
 
-  function onModifyItem(id: number, newTitle: string) {
+  function onModifyItem(id: string, newTitle: string) {
     setItems(
       items.map((item) => {
         if (item.id === id) {
@@ -46,7 +47,7 @@ function App() {
 
   /* Wheel */
   const [wheelData, setWheelData] = useState([
-    { option: "Adicione um Item" },
+    { option: "Adicione um Item", id: "0" },
   ] as WheelDataModel[]);
 
   const [mustSpin, setMustSpin] = useState(false);
@@ -70,18 +71,23 @@ function App() {
 
   function onAddWheelData() {
     const newWheelData =
-      items.length === 0 ? [] : items.map((item) => ({ option: item.title }));
+      items.length === 0
+        ? []
+        : items.map((item) => ({ option: item.title, id: item.id }));
     setWheelData(newWheelData);
   } // Adicionar itens da lista na roleta
 
   function onCloseModal() {
     setModalOpen(false);
+    if (isEliminatory) {
+      onDeleteItem(wheelData[prizeNumber].id);
+    }
   } // fechar modal
 
   /* Options */
   const themesColor: ThemeModel[] = [
     { id: 1, name: "Flamengo", colors: ["#3e3e3e", "#df3428"] },
-    { id: 2, name: "Botafogo", colors: ["#ffffff", "#000000"] },
+    { id: 2, name: "Botafogo", colors: ["#ffffff", "#31393f"] },
     { id: 3, name: "Palmeiras", colors: ["#00ff1f", "#ffffff"] },
   ];
 
@@ -97,7 +103,12 @@ function App() {
   const [spinDuration, setSpinDuration] = useState(0.5);
   const [fontSize, setFontSize] = useState(20);
   const [isTextWhite, setIsTextWhite] = useState(false);
+  const [isEliminatory, setIsEliminatory] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(themesColor[0]);
+
+  const handleEliminatory = useCallback(() => {
+    setIsEliminatory((valorAtual) => !valorAtual);
+  }, []);
 
   function onChangeFont(event: React.ChangeEvent<HTMLSelectElement>) {
     setSelectedFont(event.target.value);
@@ -154,6 +165,11 @@ function App() {
     }
   }, [modalOpen, onCloseModal]); // Fecha o modal automaticamente após X segundos
 
+  /*  Scrapper  */
+  const handleLetterboxdItems = (newItems: ItemModel[]) => {
+    setItems(newItems);
+  };
+
   /* Página Secreta */
   const navigate = useNavigate(); //uso do hook useNavigate para navegar entre as páginas
 
@@ -189,7 +205,7 @@ function App() {
             onDeleteItem={onDeleteItem}
             onModifyItem={onModifyItem}
           />
-          <div className="flex-col space-y-2">
+          <div className="flex-col space-y-2 space-x-2">
             <Button
               onClick={() => setOptionOpen(!optionOpen)}
               className="text-sm bg-slate-600"
@@ -210,8 +226,12 @@ function App() {
                 onSpinDurationChange={handleSpinDurationChange}
                 isTextWhite={isTextWhite}
                 onTextColorChange={handleTextColor}
+                isEliminatory={isEliminatory}
+                onEliminatoryChange={handleEliminatory}
               />
             )}
+
+            <MovieScrap onItemsReady={handleLetterboxdItems} />
           </div>
         </div>
 
@@ -222,6 +242,11 @@ function App() {
             mustSpin={mustSpin}
             prizeNumber={prizeNumber}
             onStopSpinning={onWheelStopSpinning}
+            fontFamily={selectedFont}
+            fontSize={fontSize}
+            spinDuration={spinDuration}
+            isTextWhite={isTextWhite}
+            theme={selectedTheme}
           />
 
           <Button
@@ -260,9 +285,9 @@ function App() {
 
               <div className="mt-4 text-center">
                 <p className="text-2xl font-bold tracking-tight text-white sm:text-5xl">
-                  {wheelData && wheelData.length > 0
+                  {wheelData[prizeNumber]
                     ? `${wheelData[prizeNumber].option}`
-                    : `Vazio`}
+                    : "Vazio"}
                 </p>
               </div>
 

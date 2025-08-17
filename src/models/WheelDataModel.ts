@@ -1,5 +1,6 @@
 interface WheelDataModel {
   option?: string;
+  id: string;
   image?: ImageProps;
   style?: StyleType; // Optional
   optionSize?: number; // Optional

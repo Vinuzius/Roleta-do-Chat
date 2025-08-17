@@ -2,21 +2,18 @@ import { DeleteIcon, RotateCcw } from "lucide-react";
 import React, { useState } from "react";
 import Button from "../utils/Button";
 import { ItemEditForm } from "./ItemEditForm";
+import ItemModel from "../../models/ItemModel";
 
-interface Item {
-  id: number;
-  title: string;
-}
 interface ItemProps {
-  items: Item[];
-  onDeleteItem: (id: number) => void;
-  onModifyItem: (id: number, newTitle: string) => void;
+  items: ItemModel[];
+  onDeleteItem: (id: string) => void;
+  onModifyItem: (id: string, newTitle: string) => void;
 }
 
 const Itens: React.FC<ItemProps> = ({ items, onDeleteItem, onModifyItem }) => {
-  const [editingItemId, setEditingItemId] = useState<number | null>(null);
+  const [editingItemId, setEditingItemId] = useState<string | null>(null);
 
-  function onDeleteItemClick(id: number) {
+  function onDeleteItemClick(id: string) {
     onDeleteItem(id);
   } // ao deletar item
 
@@ -28,7 +25,7 @@ const Itens: React.FC<ItemProps> = ({ items, onDeleteItem, onModifyItem }) => {
     }
   }; // ao salvar o item modificado
 
-  const handleModifyClick = (item: Item) => {
+  const handleModifyClick = (item: ItemModel) => {
     setEditingItemId(item.id);
   }; // ao clicar no botão de edição
 
