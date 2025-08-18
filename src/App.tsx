@@ -1,49 +1,35 @@
 import { useCallback, useEffect, useState } from "react";
 import "./App.css";
+import useItems from "./components/Itens/useItems";
 import Itens from "./components/Itens/Items";
 import AddItem from "./components/Itens/AddItem";
-import ItemModel from "./models/ItemModel";
 import WheelDecide from "./components/Wheel/WheelDecide";
-import { WheelDataModel } from "./models/WheelDataModel";
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import SettingsPanel from "./components/Wheel/SettingsPanel";
+import MovieScrap from "./components/MovieScrap";
+import Button from "./components/utils/Button";
 import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import Button from "./components/utils/Button";
-import SettingsPanel from "./components/Wheel/SettingsPanel";
 import ThemeModel from "./models/themeModel";
 import FontModel from "./models/FontModel";
-import MovieScrap from "./components/MovieScrap";
+import { WheelDataModel } from "./models/WheelDataModel";
+import ItemModel from "./models/ItemModel";
+import WheelModal from "./components/utils/Modals/WheelModal";
+
+const themesColor: ThemeModel[] = [
+  { id: 1, name: "Flamengo", colors: ["#3e3e3e", "#df3428"] },
+  { id: 2, name: "Botafogo", colors: ["#ffffff", "#31393f"] },
+  { id: 3, name: "Palmeiras", colors: ["#00ff1f", "#ffffff"] },
+];
+
+const fontOptions: FontModel[] = [
+  { id: 1, value: "Roboto", name: "Roboto" },
+  { id: 2, value: "Comic Relief", name: "Comic Relief" },
+  { id: 3, value: "Rubik Wet Paint", name: "Rubik Wet Paint" },
+];
 
 function App() {
   /* Items */
-  const [items, setItems] = useState(
-    JSON.parse(localStorage.getItem("items") || "[]") as ItemModel[]
-  );
-
-  function onAddItemSubmit(title: string) {
-    const newItem = {
-      id: crypto.randomUUID(),
-      title,
-    };
-    setItems([...items, newItem]);
-  } // adicionar um novo item
-
-  function onDeleteItem(id: string) {
-    const newItems = items.filter((item) => item.id !== id);
-    setItems(newItems);
-  } // deleta o item
-
-  function onModifyItem(id: string, newTitle: string) {
-    setItems(
-      items.map((item) => {
-        if (item.id === id) {
-          return { ...item, title: newTitle };
-        }
-
-        return item;
-      })
-    );
-  } // modifica o item
+  const { items, addItemSubmit, deleteItem, modifyItem } = useItems();
 
   /* Wheel */
   const [wheelData, setWheelData] = useState([
@@ -80,22 +66,11 @@ function App() {
   function onCloseModal() {
     setModalOpen(false);
     if (isEliminatory) {
-      onDeleteItem(wheelData[prizeNumber].id);
+      deleteItem(wheelData[prizeNumber].id);
     }
   } // fechar modal
 
   /* Options */
-  const themesColor: ThemeModel[] = [
-    { id: 1, name: "Flamengo", colors: ["#3e3e3e", "#df3428"] },
-    { id: 2, name: "Botafogo", colors: ["#ffffff", "#31393f"] },
-    { id: 3, name: "Palmeiras", colors: ["#00ff1f", "#ffffff"] },
-  ];
-
-  const fontOptions: FontModel[] = [
-    { id: 1, value: "Roboto", name: "Roboto" },
-    { id: 2, value: "Comic Relief", name: "Comic Relief" },
-    { id: 3, value: "Rubik Wet Paint", name: "Rubik Wet Paint" },
-  ];
 
   const [optionOpen, setOptionOpen] = useState(false);
   //const [background, setBackground] = useState(false);
@@ -141,11 +116,6 @@ function App() {
   }, []); //garante que a função não seja re-criada em memória a cada nova renderização do componente
 
   /* Use Effects */
-  useEffect(() => {
-    localStorage.setItem("items", JSON.stringify(items));
-    onAddWheelData();
-    //nome do que eu quero armazenar, e o que vai ser armazenado
-  }, [items]); // sempre que a lista de item for alterada, atualiza o localStorage
 
   useEffect(() => {
     onAddWheelData();
@@ -164,11 +134,6 @@ function App() {
       };
     }
   }, [modalOpen, onCloseModal]); // Fecha o modal automaticamente após X segundos
-
-  /*  Scrapper  */
-  const handleLetterboxdItems = (newItems: ItemModel[]) => {
-    setItems(newItems);
-  };
 
   /* Página Secreta */
   const navigate = useNavigate(); //uso do hook useNavigate para navegar entre as páginas
@@ -199,11 +164,11 @@ function App() {
       <div className="flex flex-1 gap-6 items-start">
         {/* LEFT COLUMN */}
         <div className="w-[500px] space-y-3">
-          <AddItem onAddItemSubmit={onAddItemSubmit} />
+          <AddItem onAddItemSubmit={addItemSubmit} />
           <Itens
             items={items}
-            onDeleteItem={onDeleteItem}
-            onModifyItem={onModifyItem}
+            onDeleteItem={deleteItem}
+            onModifyItem={modifyItem}
           />
           <div className="flex-col space-y-2 space-x-2">
             <Button
@@ -231,7 +196,7 @@ function App() {
               />
             )}
 
-            <MovieScrap onItemsReady={handleLetterboxdItems} />
+            <MovieScrap />
           </div>
         </div>
 
@@ -259,53 +224,12 @@ function App() {
       </div>
 
       {/* WHEEL MODAL */}
-      <Dialog
-        open={modalOpen}
-        onClose={onCloseModal}
-        className="relative z-50 focus:outline-none"
-      >
-        <div
-          className="fixed inset-0 bg-black/30 transition-opacity duration-300 ease-out data-[closed]:opacity-0"
-          aria-hidden="true"
-        />
-
-        <div className="fixed inset-0 z-50 w-screen overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4">
-            <DialogPanel
-              className="w-full max-w-sm rounded-2xl bg-white/5 p-8 backdrop-blur-2xl
-                   border border-white/10 shadow-2xl shadow-black/20
-                   transition duration-300 ease-out data-[closed]:scale-95 data-[closed]:opacity-0"
-            >
-              <DialogTitle
-                as="h3"
-                className="text-center text-sm font-medium text-white/50"
-              >
-                Resultado
-              </DialogTitle>
-
-              <div className="mt-4 text-center">
-                <p className="text-2xl font-bold tracking-tight text-white sm:text-5xl">
-                  {wheelData[prizeNumber]
-                    ? `${wheelData[prizeNumber].option}`
-                    : "Vazio"}
-                </p>
-              </div>
-
-              <div className="mt-8 text-center">
-                <button
-                  className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-6 py-2.5 text-base font-semibold text-white
-                       border border-transparent
-                       transition hover:bg-white/20 hover:border-white/20 
-                       focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
-                  onClick={onCloseModal}
-                >
-                  Fechar
-                </button>
-              </div>
-            </DialogPanel>
-          </div>
-        </div>
-      </Dialog>
+      <WheelModal
+        modalOpen={modalOpen}
+        onCloseModal={onCloseModal}
+        wheelData={wheelData}
+        prizeNumber={prizeNumber}
+      />
     </div>
   );
 }
