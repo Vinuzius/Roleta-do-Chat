@@ -1,4 +1,4 @@
-// api/getMovies.ts
+// api/getMovies.cts
 
 import axios from "axios";
 import * as cheerio from "cheerio";
