@@ -18,7 +18,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!listUrl.startsWith("https://letterboxd.com/")) {
     return res.status(400).json({ error: "Tem que ser um link do letterboxd" });
   }
-
   try {
     const { data } = await axios.get(listUrl, {
       headers: {
