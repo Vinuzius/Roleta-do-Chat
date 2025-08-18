@@ -6,18 +6,12 @@
       "use": "@vercel/static-build",
       "config": { "distDir": "dist" }
     },
-    {
-      "src": "api/**/*.(ts|cts)",
-      "use": "@vercel/node@3"
-    }
+    { "src": "api/**/*.ts", "use": "@vercel/node@3" },
+    { "src": "api/**/*.cts", "use": "@vercel/node@3" }
   ],
   "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1.ts" },
     { "src": "/api/(.*)", "dest": "/api/$1.cts" },
     { "src": "/(.*)", "dest": "/index.html" }
-  ],
-  "functions": {
-    "api/*.(ts|cts)": {
-      "runtime": "@vercel/node@3"
-    }
-  }
+  ]
 }
