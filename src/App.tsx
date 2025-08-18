@@ -12,7 +12,6 @@ import { useNavigate } from "react-router-dom";
 import ThemeModel from "./models/themeModel";
 import FontModel from "./models/FontModel";
 import { WheelDataModel } from "./models/WheelDataModel";
-import ItemModel from "./models/ItemModel";
 import WheelModal from "./components/utils/Modals/WheelModal";
 
 const themesColor: ThemeModel[] = [
