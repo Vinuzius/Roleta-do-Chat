@@ -1,6 +1,7 @@
 import { Wheel } from "react-custom-roulette";
 import { WheelDataModel } from "../../models/WheelDataModel";
 import ThemeModel from "../../models/themeModel";
+import React from "react";
 
 interface DataProps {
   wheelData: WheelDataModel[];
@@ -53,4 +54,4 @@ const WheelDecide: React.FC<DataProps> = ({
   );
 };
 
-export default WheelDecide;
+export default React.memo(WheelDecide);

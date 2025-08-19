@@ -1,7 +1,10 @@
 import { useState } from "react";
 import Button from "./utils/Button";
 import ItemModel from "../models/ItemModel";
-import useItems from "./Itens/useItems";
+
+interface MovieScrapProps {
+  onItemsReady: (items: ItemModel[]) => void;
+}
 
 function shuffleArray<T>(array: T[]): T[] {
   const shuffled = [...array];
@@ -12,15 +15,13 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-export default function MovieScrap() {
+export default function MovieScrap({ onItemsReady }: MovieScrapProps) {
   const [listUrl, setListUrl] = useState(
     "https://letterboxd.com/patrickoliben/list/filmes-de-qualidade-duvidavel-ou-so-ruins/"
   );
   const [titleCount, setTitleCount] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const { handleLetterboxdItems } = useItems();
 
   const handleTitleCountChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -52,7 +53,7 @@ export default function MovieScrap() {
       }));
       const shuffledItems = shuffleArray(movieItems);
       const limitedItems = shuffledItems.slice(0, titleCount);
-      handleLetterboxdItems(limitedItems);
+      onItemsReady(limitedItems);
     } catch (err: any) {
       setError(err.message);
     } finally {

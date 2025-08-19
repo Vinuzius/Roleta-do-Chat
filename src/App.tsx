@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import useItems from "./components/Itens/useItems";
 import Itens from "./components/Itens/Items";
@@ -11,8 +10,9 @@ import { ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ThemeModel from "./models/themeModel";
 import FontModel from "./models/FontModel";
-import { WheelDataModel } from "./models/WheelDataModel";
 import WheelModal from "./components/utils/Modals/WheelModal";
+import useWheel from "./components/Wheel/useWheel";
+import useSettings from "./components/Wheel/useSettings";
 
 const themesColor: ThemeModel[] = [
   { id: 1, name: "Flamengo", colors: ["#3e3e3e", "#df3428"] },
@@ -27,116 +27,43 @@ const fontOptions: FontModel[] = [
 ];
 
 function App() {
-  /* Items */
-  const { items, addItemSubmit, deleteItem, modifyItem } = useItems();
+  const {
+    items,
+    addItemSubmit,
+    deleteItem,
+    modifyItem,
+    handleLetterboxdItems,
+  } = useItems();
 
-  /* Wheel */
-  const [wheelData, setWheelData] = useState([
-    { option: "Adicione um Item", id: "0" },
-  ] as WheelDataModel[]);
+  const {
+    optionOpen,
+    setOptionOpen,
+    selectedFont,
+    handleFontChange,
+    spinDuration,
+    handleSpinDurationChange,
+    fontSize,
+    handleFontSizeChange,
+    isTextWhite,
+    toggleTextColor,
+    isEliminatory,
+    toggleEliminatory,
+    selectedTheme,
+    setSelectedTheme,
+  } = useSettings(themesColor[0]);
 
-  const [mustSpin, setMustSpin] = useState(false);
-
-  const [prizeNumber, setPrizeNumber] = useState(0);
-
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const handleSpinClick = () => {
-    if (!mustSpin) {
-      const newPrizeNumber = Math.floor(Math.random() * wheelData.length);
-      setPrizeNumber(newPrizeNumber);
-      setMustSpin(true);
-    }
-  }; // Quando iniciar a roleta
-
-  function onWheelStopSpinning() {
-    setMustSpin(false);
-    setModalOpen(true);
-  } // Quando a roleta para de girar
-
-  function onAddWheelData() {
-    const newWheelData =
-      items.length === 0
-        ? []
-        : items.map((item) => ({ option: item.title, id: item.id }));
-    setWheelData(newWheelData);
-  } // Adicionar itens da lista na roleta
-
-  function onCloseModal() {
-    setModalOpen(false);
-    if (isEliminatory) {
-      deleteItem(wheelData[prizeNumber].id);
-    }
-  } // fechar modal
-
-  /* Options */
-
-  const [optionOpen, setOptionOpen] = useState(false);
-  //const [background, setBackground] = useState(false);
-  const [selectedFont, setSelectedFont] = useState("Roboto");
-  const [spinDuration, setSpinDuration] = useState(0.5);
-  const [fontSize, setFontSize] = useState(20);
-  const [isTextWhite, setIsTextWhite] = useState(false);
-  const [isEliminatory, setIsEliminatory] = useState(false);
-  const [selectedTheme, setSelectedTheme] = useState(themesColor[0]);
-
-  const handleEliminatory = useCallback(() => {
-    setIsEliminatory((valorAtual) => !valorAtual);
-  }, []);
-
-  function onChangeFont(event: React.ChangeEvent<HTMLSelectElement>) {
-    setSelectedFont(event.target.value);
-  }
-
-  const handleSpinDurationChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = parseFloat(event.target.value);
-
-      // Evita que o estado se torne NaN (Not a Number) se o campo estiver vazio
-      if (!isNaN(newValue)) {
-        setSpinDuration(newValue);
-      }
-    },
-    []
-  );
-
-  const handleFontSizeChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = parseFloat(event.target.value);
-      if (!isNaN(newValue)) {
-        setFontSize(newValue);
-      }
-    },
-    []
-  );
-
-  const handleTextColor = useCallback(() => {
-    setIsTextWhite((valorAtual) => !valorAtual);
-  }, []); //garante que a função não seja re-criada em memória a cada nova renderização do componente
-
-  /* Use Effects */
-
-  useEffect(() => {
-    onAddWheelData();
-  }, []); //Quando inicializar o app, já adiciona os dados da memoria na roleta
-
-  useEffect(() => {
-    if (modalOpen) {
-      // caso o Modal esteja aberto, vai iniciar um temporizador para fechá-lo
-      const timerId = setTimeout(() => {
-        onCloseModal();
-      }, 5000); // 1000 milissegundos = 1 segundos
-
-      return () => {
-        //Esta função é executada se o modal for fechado manualmente antes do tempo acabar
-        clearTimeout(timerId);
-      };
-    }
-  }, [modalOpen, onCloseModal]); // Fecha o modal automaticamente após X segundos
+  const {
+    wheelData,
+    mustSpin,
+    prizeNumber,
+    modalOpen,
+    handleSpinClick,
+    onWheelStopSpinning,
+    onCloseModal,
+  } = useWheel(items, isEliminatory, deleteItem);
 
   /* Página Secreta */
   const navigate = useNavigate(); //uso do hook useNavigate para navegar entre as páginas
-
   function onSecretClick() {
     //uso do queryParams para passar o título do item  ele vai tratar qualquer coisa sem ter risco de haver um erro
     const queryParams = new URLSearchParams();
@@ -183,19 +110,19 @@ function App() {
                 selectedTheme={selectedTheme}
                 onThemeChange={setSelectedTheme}
                 selectedFont={selectedFont}
-                onFontChange={onChangeFont}
+                onFontChange={handleFontChange}
                 fontSize={fontSize}
                 onFontSizeChange={handleFontSizeChange}
                 spinDuration={spinDuration}
                 onSpinDurationChange={handleSpinDurationChange}
                 isTextWhite={isTextWhite}
-                onTextColorChange={handleTextColor}
+                onTextColorChange={toggleTextColor}
                 isEliminatory={isEliminatory}
-                onEliminatoryChange={handleEliminatory}
+                onEliminatoryChange={toggleEliminatory}
               />
             )}
 
-            <MovieScrap />
+            <MovieScrap onItemsReady={handleLetterboxdItems} />
           </div>
         </div>
 
@@ -222,7 +149,6 @@ function App() {
         </div>
       </div>
 
-      {/* WHEEL MODAL */}
       <WheelModal
         modalOpen={modalOpen}
         onCloseModal={onCloseModal}
