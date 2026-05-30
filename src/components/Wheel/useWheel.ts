@@ -5,6 +5,7 @@ import ItemModel from "../../models/ItemModel";
 function useWheel(
   items: ItemModel[],
   isEliminatory: boolean,
+  eliminateAfterTwoFalls: boolean,
   deleteItem: (id: string) => void
 ) {
   const [wheelData, setWheelData] = useState<WheelDataModel[]>([
@@ -15,6 +16,10 @@ function useWheel(
   const [prizeNumber, setPrizeNumber] = useState(0);
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [fallCounts, setFallCounts] = useState<Record<string, number>>({});
+  const [pendingDeletionId, setPendingDeletionId] = useState<string | null>(
+    null,
+  );
   // Effect to update wheelData whenever the items list changes
   useEffect(() => {
     const newWheelData =
@@ -27,8 +32,35 @@ function useWheel(
     setWheelData(newWheelData);
   }, [items]); // Atualiza wheelData quando a lista de items mudar
 
+  useEffect(() => {
+    setFallCounts({});
+    setPendingDeletionId(null);
+  }, [isEliminatory, eliminateAfterTwoFalls]);
+
+  useEffect(() => {
+    setFallCounts((previousCounts) => {
+      const nextCounts: Record<string, number> = {};
+
+      for (const item of items) {
+        const count = previousCounts[item.id];
+
+        if (typeof count === "number") {
+          nextCounts[item.id] = count;
+        }
+      }
+
+      return nextCounts;
+    });
+
+    setPendingDeletionId((currentId) =>
+      currentId && items.some((item) => item.id === currentId)
+        ? currentId
+        : null,
+    );
+  }, [items]);
+
   const handleSpinClick = () => {
-    if (!mustSpin && wheelData.length > 0) {
+    if (!mustSpin && !modalOpen && wheelData.length > 0) {
       const newPrizeNumber = Math.floor(Math.random() * wheelData.length);
       setPrizeNumber(newPrizeNumber);
       setMustSpin(true);
@@ -37,15 +69,36 @@ function useWheel(
 
   function onWheelStopSpinning() {
     setMustSpin(false);
+    const selectedItem = wheelData[prizeNumber];
+
+    if (isEliminatory && selectedItem?.id) {
+      if (eliminateAfterTwoFalls) {
+        const nextCount = (fallCounts[selectedItem.id] ?? 0) + 1;
+
+        setFallCounts((previousCounts) => ({
+          ...previousCounts,
+          [selectedItem.id]: nextCount,
+        }));
+
+        setPendingDeletionId(nextCount >= 2 ? selectedItem.id : null);
+      } else {
+        setPendingDeletionId(selectedItem.id);
+      }
+    } else {
+      setPendingDeletionId(null);
+    }
+
     setModalOpen(true);
   } // Quando a roleta para de girar
 
   const onCloseModal = useCallback(() => {
     setModalOpen(false);
-    if (isEliminatory && wheelData[prizeNumber].id) {
-      deleteItem(wheelData[prizeNumber].id);
+
+    if (pendingDeletionId) {
+      deleteItem(pendingDeletionId);
+      setPendingDeletionId(null);
     }
-  }, [isEliminatory, prizeNumber, wheelData, deleteItem]); // fechar modal
+  }, [pendingDeletionId, deleteItem]); // fechar modal
 
   useEffect(() => {
     if (modalOpen) {

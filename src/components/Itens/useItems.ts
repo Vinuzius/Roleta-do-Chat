@@ -142,6 +142,55 @@ function useItems() {
     setActiveSetId(null);
   }
 
+  function duplicateItem(id: string) {
+    let wasDuplicated = false;
+
+    setItems((previousItems) => {
+      const itemIndex = previousItems.findIndex((item) => item.id === id);
+
+      if (itemIndex < 0) {
+        return previousItems;
+      }
+
+      const duplicatedItem = {
+        ...previousItems[itemIndex],
+        id: crypto.randomUUID(),
+      };
+
+      const nextItems = [...previousItems];
+      const availablePositions = [] as number[];
+
+      for (let position = 0; position <= previousItems.length; position += 1) {
+        const canAvoidAdjacency = previousItems.length > 1;
+
+        if (
+          canAvoidAdjacency &&
+          (position === itemIndex || position === itemIndex + 1)
+        ) {
+          continue;
+        }
+
+        availablePositions.push(position);
+      }
+
+      const insertionIndex =
+        availablePositions[
+          Math.floor(Math.random() * availablePositions.length)
+        ];
+
+      nextItems.splice(insertionIndex, 0, duplicatedItem);
+      wasDuplicated = true;
+
+      return nextItems;
+    });
+
+    if (wasDuplicated) {
+      setActiveSetId(null);
+    }
+
+    return wasDuplicated;
+  }
+
   function modifyItem(id: string, newTitle: string) {
     setItems((previousItems) =>
       previousItems.map((item) => {
@@ -264,6 +313,7 @@ function useItems() {
     activeSetName,
     addItemSubmit,
     deleteItem,
+    duplicateItem,
     modifyItem,
     handleLetterboxdItems,
     selectSet,

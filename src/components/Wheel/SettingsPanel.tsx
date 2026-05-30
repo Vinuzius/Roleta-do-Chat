@@ -19,6 +19,8 @@ import FontModel from "../../models/FontModel";
 interface SettingsPanelProps {
   isEliminatory: boolean;
   onEliminatoryChange: () => void;
+  eliminateAfterTwoFalls: boolean;
+  onEliminateAfterTwoFallsChange: () => void;
   themes: ThemeModel[];
   selectedTheme: ThemeModel;
   onThemeChange: (theme: ThemeModel) => void;
@@ -48,6 +50,8 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onTextColorChange,
   isEliminatory,
   onEliminatoryChange,
+  eliminateAfterTwoFalls,
+  onEliminateAfterTwoFallsChange,
 }) => {
   // Base style for all inputs and selects for a consistent dark theme
   const baseInputStyle =
@@ -70,6 +74,19 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
           </Checkbox>
           <Label className="text-sm font-medium leading-6 text-gray-300">
             Eliminar Selecionado
+          </Label>
+        </div>
+
+        <div className="flex items-center gap-x-3 pt-2">
+          <Checkbox
+            checked={eliminateAfterTwoFalls}
+            onChange={onEliminateAfterTwoFallsChange}
+            className="group h-6 w-6 rounded-md bg-white/10 p-1 ring-1 ring-inset ring-white/10 data-[checked]:bg-amber-600"
+          >
+            <X className="hidden h-4 w-4 fill-white group-data-[checked]:block" />
+          </Checkbox>
+          <Label className="text-sm font-medium leading-6 text-gray-300">
+            Eliminar após 2 quedas
           </Label>
         </div>
         {/* Future feature: Color Picker */}

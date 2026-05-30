@@ -1,4 +1,4 @@
-import { DeleteIcon, RotateCcw } from "lucide-react";
+import { Copy, DeleteIcon, RotateCcw } from "lucide-react";
 import React, { useState } from "react";
 import Button from "../utils/Button";
 import { ItemEditForm } from "./ItemEditForm";
@@ -7,10 +7,16 @@ import ItemModel from "../../models/ItemModel";
 interface ItemProps {
   items: ItemModel[];
   onDeleteItem: (id: string) => void;
+  onDuplicateItem: (id: string) => void;
   onModifyItem: (id: string, newTitle: string) => void;
 }
 
-const Itens: React.FC<ItemProps> = ({ items, onDeleteItem, onModifyItem }) => {
+const Itens: React.FC<ItemProps> = ({
+  items,
+  onDeleteItem,
+  onDuplicateItem,
+  onModifyItem,
+}) => {
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
 
   function onDeleteItemClick(id: string) {
@@ -48,7 +54,7 @@ const Itens: React.FC<ItemProps> = ({ items, onDeleteItem, onModifyItem }) => {
                 <p className="min-w-0 flex-1 break-words rounded-md bg-slate-700 px-3 py-2 text-white">
                   {item.title}
                 </p>
-                <div className="grid grid-cols-2 gap-2 sm:flex sm:gap-2">
+                <div className="grid grid-cols-3 gap-2 sm:flex sm:gap-2">
                   <Button
                     onClick={() => handleModifyClick(item)}
                     className="w-full bg-slate-700 px-3 sm:w-auto"
@@ -56,6 +62,15 @@ const Itens: React.FC<ItemProps> = ({ items, onDeleteItem, onModifyItem }) => {
                     <RotateCcw className="h-4 w-4" />
                     <span className="text-sm font-medium sm:hidden">
                       Editar
+                    </span>
+                  </Button>
+                  <Button
+                    onClick={() => onDuplicateItem(item.id)}
+                    className="w-full bg-cyan-600 px-3 hover:bg-cyan-700 sm:w-auto"
+                  >
+                    <Copy className="h-4 w-4" />
+                    <span className="text-sm font-medium sm:hidden">
+                      Duplicar
                     </span>
                   </Button>
                   <Button
