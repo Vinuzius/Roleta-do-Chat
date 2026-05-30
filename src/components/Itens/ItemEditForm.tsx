@@ -34,7 +34,7 @@ export const ItemEditForm: React.FC<ItemEditFormProps> = ({
         maxLength={18}
         value={editedTitle}
         onChange={(e) => setEditedTitle(e.target.value)}
-        className="min-w-0 flex-1 rounded-md border border-slate-400 p-2 outline-blue-500"
+        className="min-w-0 flex-1 rounded-md border border-white/10 bg-slate-950/70 p-2 text-slate-100 outline-blue-500"
         autoFocus
         onKeyDown={handleKeyDown}
       />

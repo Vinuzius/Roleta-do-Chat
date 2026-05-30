@@ -193,16 +193,16 @@ function ItemSetManager({
     "mt-2 block w-full rounded-md border-0 bg-white/10 px-3 py-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500";
 
   return (
-    <div className="space-y-3 rounded-md bg-slate-200 p-4 shadow">
+    <div className="space-y-3 rounded-2xl border border-white/10 bg-slate-900/75 p-4 shadow-lg shadow-black/10">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
             Conjunto atual
           </p>
-          <p className="truncate text-sm font-semibold text-slate-800">
+          <p className="truncate text-sm font-semibold text-white">
             {currentLabel}
           </p>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-400">
             {savedSets.length} conjunto(s) salvo(s)
           </p>
         </div>
@@ -210,7 +210,7 @@ function ItemSetManager({
         <Menu as="div" className="relative shrink-0 self-start">
           <MenuButton
             disabled={!hasSavedSets}
-            className="inline-flex w-full items-center justify-between gap-2 rounded-md bg-slate-700 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-600 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+            className="inline-flex w-full items-center justify-between gap-2 rounded-md bg-slate-800 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             {hasSavedSets
               ? (activeSetName ?? "Selecionar conjunto")
@@ -218,7 +218,7 @@ function ItemSetManager({
             <ChevronDown className="h-4 w-4" />
           </MenuButton>
 
-          <MenuItems className="absolute right-0 z-20 mt-2 max-h-64 w-72 max-w-[calc(100vw-2rem)] overflow-auto rounded-lg bg-slate-800 p-1 shadow-xl ring-1 ring-black/20 focus:outline-none sm:w-72">
+          <MenuItems className="absolute right-0 z-20 mt-2 max-h-64 w-72 max-w-[calc(100vw-2rem)] overflow-auto rounded-lg bg-slate-900 p-1 shadow-xl ring-1 ring-white/10 focus:outline-none sm:w-72">
             {savedSets.length === 0 ? (
               <div className="px-3 py-2 text-sm text-slate-400">
                 Nenhum conjunto salvo ainda.
@@ -231,7 +231,7 @@ function ItemSetManager({
                       type="button"
                       onClick={() => onSelectSet(set.id)}
                       className={`flex w-full items-center justify-between rounded-md px-3 py-3 text-left text-sm transition-colors ${
-                        focus ? "bg-slate-700 text-white" : "text-slate-200"
+                        focus ? "bg-slate-800 text-white" : "text-slate-200"
                       }`}
                     >
                       <span className="truncate">{set.name}</span>
@@ -261,7 +261,7 @@ function ItemSetManager({
         <Button
           onClick={openRenameDialog}
           disabled={!activeSetId}
-          className="w-full bg-slate-600 hover:bg-slate-700"
+          className="w-full bg-slate-700 hover:bg-slate-600"
         >
           <span className="inline-flex items-center gap-2">
             <PencilLine className="h-4 w-4" />
@@ -282,7 +282,7 @@ function ItemSetManager({
 
         <Button
           onClick={handleResetAllClick}
-          className="w-full bg-slate-600 hover:bg-slate-700"
+          className="w-full bg-slate-700 hover:bg-slate-600"
         >
           <span className="inline-flex items-center gap-2">
             <RefreshCcw className="h-4 w-4" />

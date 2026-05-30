@@ -17,14 +17,14 @@ function shuffleArray<T>(array: T[]): T[] {
 
 export default function MovieScrap({ onItemsReady }: MovieScrapProps) {
   const [listUrl, setListUrl] = useState(
-    "https://letterboxd.com/patrickoliben/list/filmes-de-qualidade-duvidavel-ou-so-ruins/"
+    "https://letterboxd.com/patrickoliben/list/filmes-de-qualidade-duvidavel-ou-so-ruins/",
   );
   const [titleCount, setTitleCount] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleTitleCountChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const count = parseInt(event.target.value, 10);
     // Only update the state if the result is a valid number

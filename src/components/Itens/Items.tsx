@@ -31,10 +31,10 @@ const Itens: React.FC<ItemProps> = ({ items, onDeleteItem, onModifyItem }) => {
 
   return (
     <div className="space-y-3">
-      <ul className="space-y-3 p-4 bg-slate-200 rounded-md shadow">
+      <ul className="space-y-3 rounded-2xl border border-white/10 bg-slate-900/75 p-4 shadow-lg shadow-black/10">
         {items.map((item) => (
           <li
-            className="rounded-md bg-slate-300 p-2 shadow-sm"
+            className="rounded-lg border border-white/10 bg-slate-950/60 p-2"
             key={item.id}
           >
             {editingItemId === item.id ? (
@@ -45,23 +45,27 @@ const Itens: React.FC<ItemProps> = ({ items, onDeleteItem, onModifyItem }) => {
               />
             ) : (
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-                <p className="min-w-0 flex-1 break-words rounded-md bg-slate-400 px-3 py-2 text-white">
+                <p className="min-w-0 flex-1 break-words rounded-md bg-slate-700 px-3 py-2 text-white">
                   {item.title}
                 </p>
                 <div className="grid grid-cols-2 gap-2 sm:flex sm:gap-2">
                   <Button
                     onClick={() => handleModifyClick(item)}
-                    className="w-full bg-slate-500 px-3 sm:w-auto"
+                    className="w-full bg-slate-700 px-3 sm:w-auto"
                   >
                     <RotateCcw className="h-4 w-4" />
-                    <span className="text-sm font-medium sm:hidden">Editar</span>
+                    <span className="text-sm font-medium sm:hidden">
+                      Editar
+                    </span>
                   </Button>
                   <Button
                     onClick={() => onDeleteItemClick(item.id)}
-                    className="w-full bg-rose-500 px-3 hover:bg-rose-600 sm:w-auto"
+                    className="w-full bg-rose-600 px-3 hover:bg-rose-700 sm:w-auto"
                   >
                     <DeleteIcon className="h-4 w-4" />
-                    <span className="text-sm font-medium sm:hidden">Excluir</span>
+                    <span className="text-sm font-medium sm:hidden">
+                      Excluir
+                    </span>
                   </Button>
                 </div>
               </div>

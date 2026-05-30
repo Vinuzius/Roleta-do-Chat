@@ -36,10 +36,10 @@ const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
   };
 
   return (
-    <div className="flex w-full flex-col space-y-3 rounded-md bg-slate-200 p-4 shadow">
+    <div className="flex w-full flex-col space-y-3 rounded-2xl border border-white/10 bg-slate-900/75 p-4 shadow-lg shadow-black/10">
       <input
         name="adicionar"
-        className="w-full rounded-md border border-slate-300 px-4 py-2 outline-slate-400"
+        className="w-full rounded-md border border-white/10 bg-slate-950/70 px-4 py-2 text-slate-100 placeholder:text-slate-500 outline-slate-400"
         type="text"
         placeholder="Digite o título a ser adicionado"
         maxLength={18}
@@ -49,7 +49,7 @@ const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
       />
       <Button
         onClick={onClickSubmit}
-        className="w-full px-4 font-medium hover:bg-slate-400 sm:w-auto"
+        className="w-full bg-slate-700 px-4 font-medium hover:bg-slate-600 sm:w-auto"
       >
         Adicionar Item
       </Button>
@@ -62,11 +62,11 @@ const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
 
         <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-          <DialogPanel className="w-full max-w-sm rounded-lg bg-white p-6 shadow-xl">
-            <DialogTitle className="font-semibold text-lg text-slate-800">
+          <DialogPanel className="w-full max-w-sm rounded-2xl border border-white/10 bg-slate-900 p-6 shadow-2xl shadow-black/30">
+            <DialogTitle className="font-semibold text-lg text-white">
               Erro
             </DialogTitle>
-            <p className="mt-2 text-sm text-slate-600">
+            <p className="mt-2 text-sm text-slate-300">
               Por favor, digite um título para continuar.
             </p>
             <div className="mt-4 text-right">

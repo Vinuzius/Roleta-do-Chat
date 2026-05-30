@@ -37,7 +37,7 @@ const WheelDecide: React.FC<DataProps> = ({
   }
 
   return (
-    <div className="-mt-3 flex w-full justify-center overflow-hidden px-2 sm:px-0">
+    <div className="flex w-full justify-center overflow-hidden px-2 py-2 sm:px-0 sm:py-4">
       <Wheel
         mustStartSpinning={mustSpin}
         prizeNumber={prizeNumber}
