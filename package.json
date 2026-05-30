@@ -14,6 +14,7 @@
     "axios": "^1.11.0",
     "cheerio": "^1.1.2",
     "lucide-react": "^0.534.0",
+    "pnpm": "^11.5.0",
     "react": "^18.3.1",
     "react-custom-roulette": "^1.4.1",
     "react-dom": "^18.3.1",
@@ -39,5 +40,6 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1"
-  }
+  },
+  "packageManager": "pnpm@11.5.0+sha512.dbfcc4f81cf48597afd4bc391ffdf12c11f1a9fb83a395bfa6b0a2d9cc2fd8ffebafdb1ccbd529632153f793904c2615b7f09fe1a345473fd1c35845172a8eb1"
 }

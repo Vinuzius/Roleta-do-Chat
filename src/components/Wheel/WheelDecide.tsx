@@ -28,8 +28,8 @@ const WheelDecide: React.FC<DataProps> = ({
 }) => {
   if (wheelData.length === 0) {
     return (
-      <div className="flex justify-center w-screen">
-        <p className="bg-slate-400 text-gray p-2 rounded-md">
+      <div className="flex w-full justify-center overflow-hidden px-4">
+        <p className="rounded-md bg-slate-400 p-2 text-center text-gray">
           Adicione itens para a roleta
         </p>
       </div>
@@ -37,7 +37,7 @@ const WheelDecide: React.FC<DataProps> = ({
   }
 
   return (
-    <div className="-mt-3">
+    <div className="-mt-3 flex w-full justify-center overflow-hidden px-2 sm:px-0">
       <Wheel
         mustStartSpinning={mustSpin}
         prizeNumber={prizeNumber}

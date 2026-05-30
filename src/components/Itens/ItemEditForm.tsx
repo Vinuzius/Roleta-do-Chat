@@ -28,22 +28,30 @@ export const ItemEditForm: React.FC<ItemEditFormProps> = ({
   };
 
   return (
-    <>
+    <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center">
       <input
         type="text"
         maxLength={18}
         value={editedTitle}
         onChange={(e) => setEditedTitle(e.target.value)}
-        className="w-full p-2 rounded-md border border-slate-400 outline-blue-500"
+        className="min-w-0 flex-1 rounded-md border border-slate-400 p-2 outline-blue-500"
         autoFocus
         onKeyDown={handleKeyDown}
       />
-      <Button onClick={handleSave} className="bg-green-500 hover:bg-green-600">
-        <Check />
+      <Button
+        onClick={handleSave}
+        className="w-full bg-green-500 hover:bg-green-600 sm:w-auto"
+      >
+        <Check className="h-4 w-4" />
+        <span className="text-sm font-semibold sm:hidden">Salvar</span>
       </Button>
-      <Button onClick={onCancel} className="bg-red-500 hover:bg-red-600">
-        <X />
+      <Button
+        onClick={onCancel}
+        className="w-full bg-red-500 hover:bg-red-600 sm:w-auto"
+      >
+        <X className="h-4 w-4" />
+        <span className="text-sm font-semibold sm:hidden">Cancelar</span>
       </Button>
-    </>
+    </div>
   );
 };

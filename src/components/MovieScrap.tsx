@@ -67,19 +67,19 @@ export default function MovieScrap({ onItemsReady }: MovieScrapProps) {
         <label htmlFor="scraper-input" className="font-semibold text-white">
           Carregar de uma lista do Letterboxd
         </label>
-        <div className="flex gap-x-2 mt-1">
+        <div className="mt-1 flex flex-col gap-2 sm:flex-row">
           <input
             id="scraper-input"
             type="text"
             value={listUrl}
             onChange={(e) => setListUrl(e.target.value)}
             placeholder="Cole o URL da lista Letterboxd aqui"
-            className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-3 text-white ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+            className="block w-full rounded-md border-0 bg-white/5 px-3 py-1.5 text-white ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500"
           />
           <Button
             onClick={handleScrape}
             disabled={isLoading}
-            className="bg-indigo-600 flex-shrink-0"
+            className="w-full flex-shrink-0 bg-indigo-600 sm:w-auto"
           >
             {isLoading ? ".........." : "Carregar"}
           </Button>
@@ -98,7 +98,7 @@ export default function MovieScrap({ onItemsReady }: MovieScrapProps) {
           type="number"
           value={titleCount}
           onChange={handleTitleCountChange}
-          className="mt-1 block w-24 rounded-md border-0 bg-white/5 py-1.5 px-3 text-white ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+          className="mt-1 block w-full rounded-md border-0 bg-white/5 px-3 py-1.5 text-white ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:w-24"
         />
       </div>
 

@@ -36,10 +36,10 @@ const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
   };
 
   return (
-    <div className="space-y-3 p-4 flex flex-col bg-slate-200 rounded-md shadow">
+    <div className="flex w-full flex-col space-y-3 rounded-md bg-slate-200 p-4 shadow">
       <input
         name="adicionar"
-        className="border border-slate-300 outline-slate-400 px-4 py-2 rounded-md"
+        className="w-full rounded-md border border-slate-300 px-4 py-2 outline-slate-400"
         type="text"
         placeholder="Digite o título a ser adicionado"
         maxLength={18}
@@ -49,7 +49,7 @@ const AddItem: React.FC<AddItemProps> = ({ onAddItemSubmit }) => {
       />
       <Button
         onClick={onClickSubmit}
-        className="px-4 font-medium hover:bg-slate-400"
+        className="w-full px-4 font-medium hover:bg-slate-400 sm:w-auto"
       >
         Adicionar Item
       </Button>
