@@ -28,6 +28,7 @@ O **Roleta do Chat** é uma aplicação web que permite criar uma lista de opç�
 * Criação de uma lista personalizada de opções.
 * Geração aleatória de um vencedor ao girar a roleta.
 * Interface responsiva, com foco em simplicidade e praticidade.
+* Customização total
 * Fácil execução local e deploy simples via Vercel.
 
 ---
