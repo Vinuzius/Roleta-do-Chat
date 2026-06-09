@@ -9,6 +9,7 @@ function useSettings(initialTheme: ThemeModel) {
   const [fontSize, setFontSize] = useState(20);
   const [isTextWhite, setIsTextWhite] = useState(false);
   const [isEliminatory, setIsEliminatory] = useState(false);
+  const [eliminateAfterTwoFalls, setEliminateAfterTwoFalls] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(initialTheme);
 
   const toggleEliminatory = useCallback(() => {
@@ -45,6 +46,10 @@ function useSettings(initialTheme: ThemeModel) {
     setIsTextWhite((valorAtual) => !valorAtual);
   }, []); //garante que a função não seja re-criada em memória a cada nova renderização do componente
 
+  const toggleEliminateAfterTwoFalls = useCallback(() => {
+    setEliminateAfterTwoFalls((valorAtual) => !valorAtual);
+  }, []);
+
   return {
     optionOpen,
     setOptionOpen,
@@ -58,6 +63,8 @@ function useSettings(initialTheme: ThemeModel) {
     toggleTextColor,
     isEliminatory,
     toggleEliminatory,
+    eliminateAfterTwoFalls,
+    toggleEliminateAfterTwoFalls,
     selectedTheme,
     setSelectedTheme,
   };
